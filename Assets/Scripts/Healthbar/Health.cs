@@ -29,6 +29,12 @@ public class Health : MonoBehaviour
             // game over
         }
     }
+    public void ResetHealth()
+    {
+        currentHealth = maxHealth;
+        HealthChanged?.Invoke();
+    }
+
 }
 
 
