@@ -9,8 +9,6 @@ public class HealthbarUI : MonoBehaviour
 
     [SerializeField] private Image fillImage;
     [SerializeField] private Gradient healthGradient;
-
-    [SerializeField] private TMP_Text healthText;
     private void Start()
     {
         healthSlider.maxValue = playerHealth.MaxHealth;
@@ -34,6 +32,5 @@ public class HealthbarUI : MonoBehaviour
         (float)playerHealth.CurrentHealth / playerHealth.MaxHealth;
 
         fillImage.color = healthGradient.Evaluate(healthPercentage);
-        healthText.text = Mathf.RoundToInt(healthPercentage * 100) + "%";
     }
 }
