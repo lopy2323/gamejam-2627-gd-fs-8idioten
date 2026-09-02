@@ -16,10 +16,19 @@ public class Health : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    public void SetHealth(int newHealth)
+    public void Damage(int amount)
     {
-        currentHealth = newHealth;
-        HealthChanged?.Invoke();
-    }
+        if (amount <= 0)
+            return;
 
+        currentHealth = Mathf.Max(currentHealth - amount, 0);
+        HealthChanged?.Invoke();
+
+        if (currentHealth == 0)
+        {
+            // game over
+        }
+    }
 }
+
+
