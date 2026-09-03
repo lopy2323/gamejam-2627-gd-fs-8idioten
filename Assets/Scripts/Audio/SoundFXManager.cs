@@ -26,6 +26,7 @@ public class SoundFXManager : MonoBehaviour
         //valume
         audiosourcespawn.volume = volume;
         //startsound
+
         audiosourcespawn.Play();
         //destroy logic
 

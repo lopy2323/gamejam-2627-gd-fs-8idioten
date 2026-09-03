@@ -106,6 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f9c3b9a31827e9459274a9634b67a54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
+  hitSound: {fileID: 8300000, guid: b906dc6c2eabb7843b30dcc9a0abdd7b, type: 3}
   originCollider: {fileID: 0}
   damage: 20
   velocity: {x: 0, y: 0}

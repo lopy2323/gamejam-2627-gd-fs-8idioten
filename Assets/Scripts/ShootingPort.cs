@@ -6,6 +6,7 @@ using Unity.Mathematics;
 public class ShootingPort : MonoBehaviour
 {
     [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private AudioClip shootSound;
 
 
     public void OnShoot(InputAction.CallbackContext context)
@@ -24,6 +25,7 @@ public class ShootingPort : MonoBehaviour
         GameObject bullet = Instantiate(Projectile, transform.position, transform.rotation);
         bullet.GetComponent<Bullet>().velocity = transform.GetComponent<SpaceShipMovment>().velocity;
         bullet.GetComponent<Bullet>().originCollider =  transform.GetComponent<Collider2D>();
+        SoundFXManager.Instance.PlaySoundFX(shootSound, transform, 80f);
     }
 
 
