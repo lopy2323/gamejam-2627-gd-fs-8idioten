@@ -10,6 +10,7 @@ public class SpaceShipMovment : MonoBehaviour
     [Header("Movement changes")]
     [SerializeField] private float thrustSpeed = 10f;
     [SerializeField] private float rotationSpeed = 100f;
+    [SerializeField] private float rotationAmount = 90f;
     [SerializeField] private float boostPower = 10f;
     [SerializeField] private float dampeningFactor = 0.98f;
 
@@ -22,6 +23,8 @@ public class SpaceShipMovment : MonoBehaviour
 
     public Vector2 velocity;
 
+    private float targetRotationAngle = 0;
+
     private float collisionCheckY = 10f;
     private float collisionCheckX = 10f;
 
@@ -29,6 +32,9 @@ public class SpaceShipMovment : MonoBehaviour
     Vector2 rotationvector;
     bool isThrusting;
     private Collision2D collidingObject;
+
+    private bool turnRight = false;
+    private bool turnLeft = false;
 
     float ThrustTimer = 0f;
     float rotationLockTimer = 0f;
@@ -46,6 +52,33 @@ public class SpaceShipMovment : MonoBehaviour
         if (rotationLockTimer <= rotationLockDuration) return;
         Vector2 input = context.ReadValue<Vector2>();
         if (input != Vector2.zero) rotationvector = input;
+    }
+
+    public void OnRotateRight(InputAction.CallbackContext context)
+    {
+        // rotate towards the right
+        if (rotationLockTimer <= rotationLockDuration) return;
+        if (context.performed)
+        {
+            turnRight = true;
+        }
+        if (context.canceled)
+        {
+            turnRight = false;
+        }
+    }
+
+    public void OnRotateLeft(InputAction.CallbackContext context)
+    {
+        if (rotationLockTimer <= rotationLockDuration) return;
+        if (context.performed)
+        {
+            turnLeft = true;
+        }
+        if (context.canceled)
+        {
+            turnLeft = false;
+        }
     }
 
     public void OnThrust(InputAction.CallbackContext context)
@@ -74,7 +107,16 @@ public class SpaceShipMovment : MonoBehaviour
         Debug.Log(Screen.width + " x " + Screen.height);
         ThrustTimer += Time.deltaTime;
         rotationLockTimer += Time.deltaTime;
-        float targetRotationAngle = Mathf.Atan2(rotationvector.y, rotationvector.x) * Mathf.Rad2Deg;
+        //float targetRotationAngle = Mathf.Atan2(rotationvector.y, rotationvector.x) * Mathf.Rad2Deg;
+
+        if (turnRight)
+        {
+            targetRotationAngle = (targetRotationAngle + rotationAmount) % 360;
+        }
+        else if (turnLeft)
+        {
+            targetRotationAngle = (targetRotationAngle - rotationAmount) % 360;
+        }
 
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, targetRotationAngle), rotationSpeed * Time.deltaTime);
 
