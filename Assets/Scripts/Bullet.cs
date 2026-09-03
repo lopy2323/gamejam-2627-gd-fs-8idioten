@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [SerializeField] private AudioClip hitSound;
+
     public Collider2D originCollider;
     private float lifetime = 2f;
     public int damage;
@@ -28,6 +30,7 @@ public class Bullet : MonoBehaviour
         if (health != null)
         {
             health.Damage(damage);
+            SoundFXManager.Instance.PlaySoundFX(hitSound,transform,100f);
         }
         Destroy(gameObject);
     }
