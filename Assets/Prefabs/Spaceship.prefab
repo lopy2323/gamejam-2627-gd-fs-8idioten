@@ -243,6 +243,7 @@ MonoBehaviour:
   rotationLockDuration: 0.2
   thrustinputWindow: 0.3
   thrustparticle: {fileID: 4141241093334070489}
+  velocity: {x: 0, y: 0}
 --- !u!114 &3217726388796732836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,9 +302,53 @@ MonoBehaviour:
     m_ActionId: 6521f7df-3a87-4ed2-a735-e73c13419227
     m_ActionName: 'GamePlay/Thrust[/XInputControllerWindows/buttonSouth]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 682c7c13-df79-4284-a0e4-0150baff5f26
     m_ActionName: 'GamePlay/Shoot[/XInputControllerWindows/rightTrigger]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2454694174930623177}
+        m_TargetAssemblyTypeName: SpaceShipMovment, Assembly-CSharp
+        m_MethodName: OnRotateRight
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 4f518614-0490-4235-b910-5feaeeaccac2
+    m_ActionName: 'GamePlay/TurnRight[/Keyboard/q]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2454694174930623177}
+        m_TargetAssemblyTypeName: SpaceShipMovment, Assembly-CSharp
+        m_MethodName: OnRotateLeft
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 609b00b3-d8b3-43d7-93f7-60eb0eaade9f
+    m_ActionName: 'GamePlay/TurnLeft[/Keyboard/w]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: GamePlay
