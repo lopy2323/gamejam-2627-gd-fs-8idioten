@@ -4,6 +4,9 @@ using UnityEngine.InputSystem;
 
 public class Health : MonoBehaviour
 {
+    [SerializeField] private int playerNumber;
+    [SerializeField] private GameManager gameManager;
+
     [SerializeField] private int maxHealth = 100;
     private int currentHealth;
 
@@ -26,7 +29,7 @@ public class Health : MonoBehaviour
 
         if (currentHealth == 0)
         {
-            // game over
+            gameManager.PlayerDied(playerNumber);
         }
     }
     public void ResetHealth()

@@ -136,7 +136,6 @@ public class SpaceShipMovment : MonoBehaviour
     public void ResetMovement(Vector3 startPosition)
     {
         velocity = Vector2.zero;
-        position = startPosition;
         transform.position = startPosition;
 
         rotationvector = Vector2.zero;
