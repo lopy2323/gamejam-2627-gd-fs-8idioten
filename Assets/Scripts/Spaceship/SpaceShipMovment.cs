@@ -18,6 +18,7 @@ public class SpaceShipMovment : MonoBehaviour
     [SerializeField] private float thrustinputWindow = 0.3f;
 
     [Header("Inputs")]
+    [SerializeField] private Boosts boostmanager;
 
     [SerializeField] private ParticleSystem thrustparticle;
 
@@ -56,8 +57,6 @@ public class SpaceShipMovment : MonoBehaviour
 
     public void OnRotateRight(InputAction.CallbackContext context)
     {
-        // rotate towards the right
-        if (rotationLockTimer <= rotationLockDuration) return;
         if (context.performed)
         {
             turnRight = true;
@@ -70,7 +69,6 @@ public class SpaceShipMovment : MonoBehaviour
 
     public void OnRotateLeft(InputAction.CallbackContext context)
     {
-        if (rotationLockTimer <= rotationLockDuration) return;
         if (context.performed)
         {
             turnLeft = true;
@@ -92,28 +90,30 @@ public class SpaceShipMovment : MonoBehaviour
         {
             if (ThrustTimer < thrustinputWindow)
             {
-                float rotationAngle = Mathf.Atan2(rotationvector.y, rotationvector.x) * Mathf.Rad2Deg;
-                velocity += new Vector2(transform.right.x, transform.right.y) * boostPower;
-                rotationLockTimer = 0f;
-                ThrustTimer = 0f;
+                if (boostmanager.UseBoost())
+                {
+                    float rotationAngle = Mathf.Atan2(rotationvector.y, rotationvector.x) * Mathf.Rad2Deg;
+                    velocity += new Vector2(transform.right.x, transform.right.y) * boostPower;
+                    rotationLockTimer = 0f;
+                }
             }
+
+            ThrustTimer = 0f;
             isThrusting = false;
         }
     }
 
     void Update()
     {
-
-        Debug.Log(Screen.width + " x " + Screen.height);
         ThrustTimer += Time.deltaTime;
         rotationLockTimer += Time.deltaTime;
         //float targetRotationAngle = Mathf.Atan2(rotationvector.y, rotationvector.x) * Mathf.Rad2Deg;
 
-        if (turnRight)
+        if (turnRight && rotationLockTimer >= rotationLockDuration)
         {
             targetRotationAngle = (targetRotationAngle + rotationAmount) % 360;
         }
-        else if (turnLeft)
+        else if (turnLeft && rotationLockTimer >= rotationLockDuration)
         {
             targetRotationAngle = (targetRotationAngle - rotationAmount) % 360;
         }
