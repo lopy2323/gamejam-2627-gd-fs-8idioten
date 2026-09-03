@@ -6,16 +6,24 @@ using Unity.Mathematics;
 public class ShootingPort : MonoBehaviour
 {
     [SerializeField] private GameObject projectilePrefab;
-    private void Update()
+
+
+    public void OnShoot(InputAction.CallbackContext context)
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        if (context.performed)
         {
             Shoot(projectilePrefab);
         }
+        if (context.canceled)
+        {
+
+        }
     }
-    public void Shoot(GameObject Projectile)
+    private void Shoot(GameObject Projectile)
     {
-        Instantiate(Projectile, transform.position, transform.rotation);
+        GameObject bullet = Instantiate(Projectile, transform.position, transform.rotation);
+        bullet.GetComponent<Bullet>().velocity = transform.GetComponent<SpaceShipMovment>().velocity;
+        bullet.GetComponent<Bullet>().originCollider =  transform.GetComponent<Collider2D>();
     }
 
 

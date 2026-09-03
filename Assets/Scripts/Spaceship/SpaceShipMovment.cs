@@ -1,52 +1,136 @@
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class SpaceShipMovment : MonoBehaviour
 {
-    private Vector2 velocity;
-    private Vector2 position;
+    [Header("Movement changes")]
+    [SerializeField] private float thrustSpeed = 10f;
+    [SerializeField] private float rotationSpeed = 100f;
+    [SerializeField] private float boostPower = 10f;
+    [SerializeField] private float dampeningFactor = 0.98f;
+
+    [SerializeField] private float rotationLockDuration = 0.5f;
+    [SerializeField] private float thrustinputWindow = 0.3f;
+
+    [Header("Inputs")]
+
+    [SerializeField] private ParticleSystem thrustparticle;
+
+    public Vector2 velocity;
+
+    private float collisionCheckY = 10f;
+    private float collisionCheckX = 10f;
 
     private CharacterController controller;
     Vector2 rotationvector;
     bool isThrusting;
+    private Collision2D collidingObject;
+
+    float ThrustTimer = 0f;
+    float rotationLockTimer = 0f;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        position = transform.position;
+
+        collisionCheckY = Camera.main.orthographicSize;
+        collisionCheckX = Camera.main.orthographicSize * Screen.width / Screen.height;
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        rotationvector = context.ReadValue<Vector2>();
+        if (rotationLockTimer <= rotationLockDuration) return;
+        Vector2 input = context.ReadValue<Vector2>();
+        if (input != Vector2.zero) rotationvector = input;
     }
 
     public void OnThrust(InputAction.CallbackContext context)
     {
-        if (context.performed) // the key has been pressed
+        if (context.performed)
         {
             isThrusting = true;
+            ThrustTimer = 0f;
         }
-        if (context.canceled) //the key has been released
+        if (context.canceled)
         {
+            if (ThrustTimer < thrustinputWindow)
+            {
+                float rotationAngle = Mathf.Atan2(rotationvector.y, rotationvector.x) * Mathf.Rad2Deg;
+                velocity += new Vector2(transform.right.x, transform.right.y) * boostPower;
+                rotationLockTimer = 0f;
+                ThrustTimer = 0f;
+            }
             isThrusting = false;
         }
     }
 
     void Update()
     {
-        float rotationAngle = Mathf.Atan2(rotationvector.y, rotationvector.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, rotationAngle);
+
+        Debug.Log(Screen.width + " x " + Screen.height);
+        ThrustTimer += Time.deltaTime;
+        rotationLockTimer += Time.deltaTime;
+        float targetRotationAngle = Mathf.Atan2(rotationvector.y, rotationvector.x) * Mathf.Rad2Deg;
+
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, targetRotationAngle), rotationSpeed * Time.deltaTime);
 
         if (isThrusting)
         {
-            velocity += new Vector2(Mathf.Cos(rotationAngle * Mathf.Deg2Rad), Mathf.Sin(rotationAngle * Mathf.Deg2Rad)) * 10f * Time.deltaTime;
+            velocity += new Vector2(transform.right.x, transform.right.y) * thrustSpeed * Time.deltaTime;
+            ParticleSystem.EmissionModule emission = thrustparticle.emission;
+            emission.enabled = true;
+        }
+        else
+        {
+            ParticleSystem.EmissionModule emission = thrustparticle.emission;
+            emission.enabled = false;
         }
 
-        position += velocity * Time.deltaTime;
+        velocity *= dampeningFactor;
 
-        transform.position = position;
+        velocity = CollisionCheck(velocity);
+
+        transform.position += new Vector3(velocity.x, velocity.y, 0) * Time.deltaTime;
+    }
+
+    private Vector2 CollisionCheck(Vector2 velocity)
+    {
+        if (transform.position.y > collisionCheckY)
+        {
+            if (velocity.y < 0) return velocity;
+            velocity = new Vector2(velocity.x, -velocity.y);
+            velocity += new Vector2(0, -1);
+        }
+        else if (transform.position.y < -collisionCheckY)
+        {
+            if (velocity.y > 0) return velocity;
+            velocity = new Vector2(velocity.x, -velocity.y);
+            velocity += new Vector2(0, 1);
+        }
+        else if (transform.position.x > collisionCheckX)
+        {
+            if (velocity.x < 0) return velocity;
+            velocity = new Vector2(-velocity.x, velocity.y);
+            velocity -= new Vector2(0, 1);
+        }
+        else if (transform.position.x < -collisionCheckX)
+        {
+            if (velocity.x > 0) return velocity;
+            velocity = new Vector2(-velocity.x, velocity.y);
+            velocity -= new Vector2(0, 1);
+        }
+        return velocity;
+    }
+
+    // draw collision border XD (only think i thought i should comment)
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(Vector2.zero, new Vector3(collisionCheckX * 2, collisionCheckY * 2, 0));
     }
 
     public void ResetMovement(Vector3 startPosition)

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.InputSystem;
 
 public class Health : MonoBehaviour
 {
@@ -15,7 +16,6 @@ public class Health : MonoBehaviour
     {
         currentHealth = maxHealth;
     }
-
     public void Damage(int amount)
     {
         if (amount <= 0)
