@@ -24,7 +24,7 @@ public class SpaceShipMovment : MonoBehaviour
 
     public Vector2 velocity;
 
-    private float targetRotationAngle = 0;
+    [SerializeField] private float targetRotationAngle = 0;
 
     private float collisionCheckY = 10f;
     private float collisionCheckX = 10f;
