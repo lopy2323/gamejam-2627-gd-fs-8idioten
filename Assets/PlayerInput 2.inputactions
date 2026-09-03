@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "name": "PlayerInput",
+    "name": "PlayerInput 2",
     "maps": [
         {
             "name": "GamePlay",
@@ -78,7 +78,7 @@
                 {
                     "name": "",
                     "id": "ad01f279-c8e8-4934-9cdc-e45203f0de27",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -100,7 +100,7 @@
                 {
                     "name": "",
                     "id": "49493288-73b9-47ae-a8e0-fdb6815efc75",
-                    "path": "<Keyboard>/r",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -111,7 +111,7 @@
                 {
                     "name": "",
                     "id": "6e89ab8c-9d88-4a28-bda0-37e436d42a98",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -122,7 +122,7 @@
                 {
                     "name": "",
                     "id": "dafe7ffb-e1cf-4078-a779-048a5d964027",
-                    "path": "<Keyboard>/w",
+                    "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

@@ -10,6 +10,7 @@ public class SpaceShipMovment : MonoBehaviour
     [Header("Movement changes")]
     [SerializeField] private float thrustSpeed = 10f;
     [SerializeField] private float rotationSpeed = 100f;
+    [SerializeField] private float rotationAmount = 90f;
     [SerializeField] private float boostPower = 10f;
     [SerializeField] private float dampeningFactor = 0.98f;
 
@@ -17,10 +18,13 @@ public class SpaceShipMovment : MonoBehaviour
     [SerializeField] private float thrustinputWindow = 0.3f;
 
     [Header("Inputs")]
+    [SerializeField] private Boosts boostmanager;
 
     [SerializeField] private ParticleSystem thrustparticle;
 
     public Vector2 velocity;
+
+    private float targetRotationAngle = 0;
 
     private float collisionCheckY = 10f;
     private float collisionCheckX = 10f;
@@ -29,6 +33,9 @@ public class SpaceShipMovment : MonoBehaviour
     Vector2 rotationvector;
     bool isThrusting;
     private Collision2D collidingObject;
+
+    private bool turnRight = false;
+    private bool turnLeft = false;
 
     float ThrustTimer = 0f;
     float rotationLockTimer = 0f;
@@ -48,6 +55,30 @@ public class SpaceShipMovment : MonoBehaviour
         if (input != Vector2.zero) rotationvector = input;
     }
 
+    public void OnRotateRight(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            turnRight = true;
+        }
+        if (context.canceled)
+        {
+            turnRight = false;
+        }
+    }
+
+    public void OnRotateLeft(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            turnLeft = true;
+        }
+        if (context.canceled)
+        {
+            turnLeft = false;
+        }
+    }
+
     public void OnThrust(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -59,22 +90,33 @@ public class SpaceShipMovment : MonoBehaviour
         {
             if (ThrustTimer < thrustinputWindow)
             {
-                float rotationAngle = Mathf.Atan2(rotationvector.y, rotationvector.x) * Mathf.Rad2Deg;
-                velocity += new Vector2(transform.right.x, transform.right.y) * boostPower;
-                rotationLockTimer = 0f;
-                ThrustTimer = 0f;
+                if (boostmanager.UseBoost())
+                {
+                    float rotationAngle = Mathf.Atan2(rotationvector.y, rotationvector.x) * Mathf.Rad2Deg;
+                    velocity += new Vector2(transform.right.x, transform.right.y) * boostPower;
+                    rotationLockTimer = 0f;
+                }
             }
+
+            ThrustTimer = 0f;
             isThrusting = false;
         }
     }
 
     void Update()
     {
-
-        Debug.Log(Screen.width + " x " + Screen.height);
         ThrustTimer += Time.deltaTime;
         rotationLockTimer += Time.deltaTime;
-        float targetRotationAngle = Mathf.Atan2(rotationvector.y, rotationvector.x) * Mathf.Rad2Deg;
+        //float targetRotationAngle = Mathf.Atan2(rotationvector.y, rotationvector.x) * Mathf.Rad2Deg;
+
+        if (turnRight && rotationLockTimer >= rotationLockDuration)
+        {
+            targetRotationAngle = (targetRotationAngle + rotationAmount) % 360;
+        }
+        else if (turnLeft && rotationLockTimer >= rotationLockDuration)
+        {
+            targetRotationAngle = (targetRotationAngle - rotationAmount) % 360;
+        }
 
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, targetRotationAngle), rotationSpeed * Time.deltaTime);
 
