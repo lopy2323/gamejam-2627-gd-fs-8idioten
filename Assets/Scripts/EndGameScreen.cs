@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class EndGameScreen : MonoBehaviour
@@ -20,5 +21,10 @@ public class EndGameScreen : MonoBehaviour
     public void MainMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void OnStart(InputAction.CallbackContext context)
+    {
+        MainMenu();
     }
 }

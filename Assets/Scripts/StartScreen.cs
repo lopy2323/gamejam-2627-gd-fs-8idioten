@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 public class StartScreen : MonoBehaviour
 {
@@ -14,6 +15,11 @@ public class StartScreen : MonoBehaviour
     public void StartGame()
     {
         SceneManager.LoadScene(1);
+    }
+
+    public void OnStart(InputAction.CallbackContext context)
+    {
+        StartGame();
     }
 }
 
