@@ -27,6 +27,7 @@ public class Boosts : MonoBehaviour
         if (BoostCount > 0)
         {
             BoostCount--;
+            timer = rechargeTime;
             Debug.Log("Boosts left: " + BoostCount);
             UpdateGameobjects();
             return true;
@@ -61,9 +62,12 @@ public class Boosts : MonoBehaviour
 
         if (timer <= 0)
         {
+            if (BoostCount < BoostsList.Count)
+            {
+                BoostCount += 1;
+                UpdateGameobjects();
+            }
             timer = rechargeTime;
-            BoostCount += 1;
-            UpdateGameobjects();
         }
     }
 
