@@ -24,7 +24,7 @@ public class SpaceShipMovment : MonoBehaviour
 
     public Vector2 velocity;
 
-    private float targetRotationAngle = 0;
+    [SerializeField] private float targetRotationAngle = 0;
 
     private float collisionCheckY = 10f;
     private float collisionCheckX = 10f;
@@ -173,5 +173,14 @@ public class SpaceShipMovment : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(Vector2.zero, new Vector3(collisionCheckX * 2, collisionCheckY * 2, 0));
+    }
+
+    public void ResetMovement(Vector3 startPosition)
+    {
+        velocity = Vector2.zero;
+        transform.position = startPosition;
+
+        rotationvector = Vector2.zero;
+        isThrusting = false;
     }
 }
