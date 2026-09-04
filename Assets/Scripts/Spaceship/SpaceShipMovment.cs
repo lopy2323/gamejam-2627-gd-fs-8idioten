@@ -111,14 +111,14 @@ public class SpaceShipMovment : MonoBehaviour
 
         if (turnRight && rotationLockTimer >= rotationLockDuration)
         {
-            targetRotationAngle = (targetRotationAngle + rotationAmount) % 360;
+            targetRotationAngle = (targetRotationAngle + rotationAmount * Time.deltaTime) % 360;
         }
         else if (turnLeft && rotationLockTimer >= rotationLockDuration)
         {
-            targetRotationAngle = (targetRotationAngle - rotationAmount) % 360;
+            targetRotationAngle = (targetRotationAngle - rotationAmount * Time.deltaTime) % 360;
         }
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, targetRotationAngle), rotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Euler(0, 0, targetRotationAngle);
 
         if (isThrusting)
         {
